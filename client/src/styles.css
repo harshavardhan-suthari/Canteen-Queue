@@ -181,6 +181,79 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.auth-section {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.tab {
+  border: 0;
+  background: #e2e8f0;
+  color: #334155;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #4338ca;
+  color: #ffffff;
+}
+
+.auth-message {
+  margin-top: 8px;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.total-summary {
+  font-size: 1.1rem;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.flow-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.flow-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.footer {
+  margin-top: 42px;
+  text-align: center;
+  color: #64748b;
+}
+
 .feature-card {
   background: #ffffff;
   border-radius: 24px;

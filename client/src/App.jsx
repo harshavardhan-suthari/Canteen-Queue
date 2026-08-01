@@ -1,5 +1,36 @@
 import { useEffect, useState } from 'react';
 
+const sampleMenu = [
+  {
+    id: 'veg-biryani',
+    name: 'Veg Biryani',
+    price: 140,
+    description: 'Flavorful rice bowl with spice-rich vegetables.',
+    image: 'https://images.unsplash.com/photo-1604908177521-3bdc89d65c4c?auto=format&fit=crop&w=640&q=80'
+  },
+  {
+    id: 'chicken-wrap',
+    name: 'Chicken Wrap',
+    price: 120,
+    description: 'Grilled chicken wrap with fresh veggies.',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=640&q=80'
+  },
+  {
+    id: 'pasta',
+    name: 'Creamy Pasta',
+    price: 110,
+    description: 'Silky pasta with tomato herb sauce.',
+    image: 'https://images.unsplash.com/photo-1523986371872-9d3ba2e2f4f1?auto=format&fit=crop&w=640&q=80'
+  },
+  {
+    id: 'juice',
+    name: 'Fresh Juice',
+    price: 60,
+    description: 'Cold-pressed seasonal fruit juice.',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=640&q=80'
+  }
+];
+
 const features = [
   { icon: '📱', title: 'Online Ordering', description: 'Browse the menu, add items to cart, and order from anywhere on campus.' },
   { icon: '💳', title: 'Instant Payment', description: 'Pay securely through digital methods and skip the counter queue.' },
@@ -36,10 +67,7 @@ function App() {
   const [authMessage, setAuthMessage] = useState('');
 
   useEffect(() => {
-    fetch('/api/menu')
-      .then((res) => res.json())
-      .then(setMenu)
-      .catch(() => setMenu([]));
+    setMenu(sampleMenu);
 
     const storedUser = localStorage.getItem('canteenUser');
     if (storedUser) {
@@ -71,45 +99,41 @@ function App() {
     });
   };
 
-  const handleRegister = async (event) => {
+  const handleRegister = (event) => {
     event.preventDefault();
     setAuthMessage('');
 
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: authName, phone: authPhone, email: authEmail, password: authPassword })
-    });
+    const user = {
+      id: crypto.randomUUID(),
+      name: authName,
+      phone: authPhone,
+      email: authEmail,
+      createdAt: new Date().toISOString()
+    };
 
-    const data = await response.json();
-    if (response.ok) {
-      setCurrentUser(data.user);
-      localStorage.setItem('canteenUser', JSON.stringify(data.user));
-      setAuthMessage('Registration successful. You are now logged in.');
-      setAuthPassword('');
-    } else {
-      setAuthMessage(data.message || 'Registration failed.');
-    }
+    localStorage.setItem('canteenUser', JSON.stringify(user));
+    setCurrentUser(user);
+    setAuthMessage('Registration successful. You are now logged in.');
+    setAuthPassword('');
   };
 
-  const handleLogin = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
     setAuthMessage('');
 
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: authEmail, password: authPassword })
-    });
+    const storedUser = localStorage.getItem('canteenUser');
+    if (!storedUser) {
+      setAuthMessage('No account found yet. Please register first.');
+      return;
+    }
 
-    const data = await response.json();
-    if (response.ok) {
-      setCurrentUser(data.user);
-      localStorage.setItem('canteenUser', JSON.stringify(data.user));
+    const user = JSON.parse(storedUser);
+    if (user.email === authEmail) {
+      setCurrentUser(user);
       setAuthMessage('Login successful.');
       setAuthPassword('');
     } else {
-      setAuthMessage(data.message || 'Login failed.');
+      setAuthMessage('Login failed. Please check your email.');
     }
   };
 
@@ -119,31 +143,29 @@ function App() {
     setAuthMessage('Logged out successfully.');
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const response = await fetch('/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        customerName,
-        phone,
-        pickupTime,
-        paymentMethod,
-        selectedItems,
-        userId: currentUser?.id
-      })
-    });
 
-    const data = await response.json();
-    if (response.ok) {
-      setOrderResult(data);
-      setSelectedItems([]);
-      if (!currentUser) {
-        setCustomerName('');
-        setPhone('');
-      }
-    } else {
-      alert(data.message || 'Order failed.');
+    if (!selectedItems.length) {
+      alert('Please select at least one item.');
+      return;
+    }
+
+    const token = `CT-${Math.floor(1000 + Math.random() * 9000)}`;
+    const order = {
+      token,
+      pickupTime,
+      paymentMethod,
+      total: subtotal + serviceFee,
+      customerName,
+      phone
+    };
+
+    setOrderResult(order);
+    setSelectedItems([]);
+    if (!currentUser) {
+      setCustomerName('');
+      setPhone('');
     }
   };
 
