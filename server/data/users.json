@@ -1,0 +1,34 @@
+[
+  {
+    "id": "9b75b93d-1024-40e6-bc2c-e6738473437c",
+    "name": "vinay",
+    "phone": "263878389",
+    "email": "kokkulavinay211@gmail.com",
+    "password": "12345",
+    "createdAt": "2026-08-01T07:24:32.846Z"
+  },
+  {
+    "id": "f11c5531-ed3f-4cea-a77d-9eb601e97d91",
+    "name": "sgaa",
+    "phone": "dedsiow",
+    "email": "dsolksa@gma",
+    "password": "dsopp",
+    "createdAt": "2026-08-01T13:20:41.858Z"
+  },
+  {
+    "id": "c4814841-7deb-4797-a086-9149c08dc21d",
+    "name": "harsha",
+    "phone": "47398304",
+    "email": "dsolksa@gmail.com",
+    "password": "213456554",
+    "createdAt": "2026-08-01T13:21:15.252Z"
+  },
+  {
+    "id": "46986a77-d42c-45fe-a6ae-5f883a1809ef",
+    "name": "Test User",
+    "phone": "9999999999",
+    "email": "test@example.com",
+    "password": "12345",
+    "createdAt": "2026-08-01T13:40:05.185Z"
+  }
+]
