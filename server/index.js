@@ -8,9 +8,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const ordersPath = path.join(__dirname, 'data', 'orders.json');
 const usersPath = path.join(__dirname, 'data', 'users.json');
+const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
+const clientIndexPath = path.join(clientBuildPath, 'index.html');
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(clientBuildPath, { index: false }));
 
 const menu = [
   {
@@ -221,6 +224,14 @@ app.get('/api/orders', (_req, res) => {
   res.json(readOrders());
 });
 
-app.listen(PORT, () => {
+app.get('*', (_req, res) => {
+  if (fs.existsSync(clientIndexPath)) {
+    res.sendFile(clientIndexPath);
+  } else {
+    res.status(404).send('Frontend build not found. Run npm run build first.');
+  }
+});
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Smart canteen server running on http://localhost:${PORT}`);
 });
